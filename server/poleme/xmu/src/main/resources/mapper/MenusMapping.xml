@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmu.test.dao.MenusDao">
+
+    <select id="getAllMenus" resultType="com.xmu.test.bean.Menu">
+        SELECT * FROM menu
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+
+    <insert id="addMenus">
+        INSERT into menu
+        VALUES(#{id},#{name},#{stock},#{style},#{imgurl},#{price},#{proceeds},#{state},#{description},#{path});
+    </insert>
+
+    <select id="getMenuIDCount" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM menu;
+    </select>
+
+    <select id="getMenuCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM menu
+        WHERE id=#{id};
+    </select>
+
+    <update id="editMenu">
+        UPDATE menu
+        SET name=#{name},stock=#{stock},style=#{style},
+        imgurl=#{imgurl},price=#{price},proceeds=#{proceeds},description=#{description},path=#{path}
+        WHERE id=#{id};
+    </update>
+
+    <delete id="deleteMenu">
+        DELETE FROM menu WHERE id=#{id};
+    </delete>
+
+    <select id="getMenuNameCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM menu
+         WHERE name LIKE concat('%',#{name},'%');
+    </select>
+
+    <select id="getSelectedMenu" resultType="com.xmu.test.bean.Menu">
+        SELECT * FROM menu
+        WHERE name LIKE concat('%',#{name},'%')
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+
+    <select id="getAllMenuCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM menu;
+    </select>
+
+    <select id="getMenuByPath" resultType="com.xmu.test.bean.Menu">
+        SELECT * FROM menu
+        WHERE path = #{path};
+    </select>
+
+    <select id="getSelectedMenuWithoutPage" resultType="com.xmu.test.bean.Menu">
+        SELECT id,name,imgurl FROM menu
+        WHERE name LIKE concat('%',#{name},'%');
+    </select>
+
+    <select id="getMenuById" resultType="com.xmu.test.bean.Menu">
+        SELECT * FROM menu
+        WHERE id = #{id};
+    </select>
+</mapper>

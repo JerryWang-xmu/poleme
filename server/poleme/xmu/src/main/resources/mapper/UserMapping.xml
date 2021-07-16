@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmu.test.dao.UserDao">
+    <select id="getUserByMassage" resultType="java.lang.Integer">
+        SELECT id FROM user
+        WHERE username=#{username} AND password=#{password} AND state=1
+    </select>
+    <select id="getUserNumByMassage" resultType="java.lang.Integer">
+        SELECT count(id) FROM user
+        WHERE username=#{username} AND password=#{password} AND state=1 AND role=#{role}
+    </select>
+    <select id="getUserCount" resultType="java.lang.Integer">
+        SELECT count(id) FROM user
+        WHERE id=#{id} AND state=1
+    </select>
+    <select id="getUserInformation" resultType="com.xmu.test.bean.User">
+        SELECT * FROM user
+        WHERE id=#{id} AND state=1
+    </select>
+    <update id="changeUserInfor">
+        UPDATE user SET username=#{username},phone=#{phone},email=#{email}
+        WHERE id=#{id} AND state=1
+    </update>
+    <select id="getSecretCount" resultType="java.lang.Integer">
+        SELECT count(id) FROM user
+        WHERE id=#{id} AND password=#{password}
+    </select>
+    <update id="changeSecret">
+        UPDATE user SET password=#{newpassword}
+        WHERE id=#{id} AND password=#{password}
+    </update>
+
+    <select id="getAllUser" resultType="com.xmu.test.bean.User">
+        SELECT * FROM user
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="getUserCounts" resultType="java.lang.Integer">
+        SELECT count(*) FROM user
+
+    </select>
+
+    <select id="getUserMaxId" resultType="java.lang.Integer">
+        SELECT max(id) FROM user
+    </select>
+
+    <insert id="addUser">
+        INSERT INTO user
+        (id,username,password,phone,email,role,state)
+        VALUE
+        (#{id},#{username},#{password},#{phone},#{email},#{role},#{state})
+    </insert>
+
+    <update id="editUser">
+        UPDATE user SET username = #{username}  ,phone=#{phone},
+        email = #{email} WHERE id = #{id}
+    </update>
+
+    <update id="revokeUser">
+        UPDATE user SET role = (CASE WHEN role="用户" THEN "管理员" ELSE "用户" END)
+        WHERE id=#{id}
+    </update>
+
+
+    <select id="getUpdateUser" resultType="com.xmu.test.bean.User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <delete id="deleteUser">
+        DELETE
+        FROM user
+        WHERE id=#{id}
+    </delete>
+
+
+    <select id="isManager" resultType="java.lang.String">
+        SELECT role FROM user
+        WHERE id=#{id}
+    </select>
+
+    <select id="getUserSelectCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM user
+        WHERE username LIKE concat('%',#{name},'%');
+    </select>
+
+    <select id="getSelectedUsers" resultType="com.xmu.test.bean.User">
+        SELECT * FROM user
+        WHERE username LIKE concat('%',#{name},'%')
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+
+    <select id="getUserNumByUsername" resultType="java.lang.Integer">
+        SELECT count(id) FROM user
+        WHERE username=#{username} ;
+    </select>
+
+</mapper>

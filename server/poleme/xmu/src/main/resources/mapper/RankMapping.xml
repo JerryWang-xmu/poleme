@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmu.test.dao.RankDao">
+    <select id="getAllMenuItemForRank" resultType="com.xmu.test.bean.Rank">
+        SELECT proceeds/price as 'order',id,name,price,imgurl
+        FROM menu
+        ORDER BY proceeds/price DESC;
+    </select>
+
+    <select id="getRankMenuItemWithPage" resultType="com.xmu.test.bean.Rank">
+        SELECT proceeds/price as 'order',id,name,price,imgurl
+        FROM menu
+        ORDER BY proceeds/price DESC
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+</mapper>

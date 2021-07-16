@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmu.test.dao.ShoppingCartDao">
+    <select id="getMessageByUid" resultType="com.xmu.test.bean.ShoppingCart">
+        SELECT * FROM shoppingcart
+        WHERE userid=#{userid}
+    </select>
+    <select id="getOrderNumByMassage" resultType="java.lang.Integer">
+        SELECT count(*) FROM shoppingcart
+        WHERE userid=#{userid} and menuid=#{menuid}
+
+    </select>
+    <insert id="insertOrder">
+        INSERT INTO shoppingcart(userid,menuid,num,selected)
+        VALUES (#{userid},#{menuid},#{num},'true')
+    </insert>
+    <update id="updateOrder">
+        UPDATE shoppingcart
+        SET num=num+#{num}
+        WHERE userid=#{userid} and menuid=#{menuid}
+    </update>
+    <delete id="deleteOrder">
+        DELETE FROM shoppingcart
+        WHERE userid=#{userid} and menuid=#{menuid}
+    </delete>
+    <update id="updateOrder_selected">
+        UPDATE shoppingcart
+        SET selected=#{selected}
+        WHERE userid=#{userid} and menuid=#{menuid}
+    </update>
+    <delete id="clearUserALL">
+        DELETE FROM shoppingcart
+        WHERE userid=#{userid}
+    </delete>
+
+    <select id="getMenuPrice" resultType="java.lang.Float">
+        SELECT price FROM menu WHERE id=#{menuid};
+    </select>
+
+    <insert id="insertOrderByShoppingCart">
+        INSERT INTO orders
+        VALUES(#{orderid},#{userid},#{menuid},#{date},#{num},#{price});
+    </insert>
+</mapper>

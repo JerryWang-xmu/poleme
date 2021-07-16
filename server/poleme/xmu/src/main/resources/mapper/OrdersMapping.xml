@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xmu.test.dao.OrdersDao">
+    <select id="getOrdersNum" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT orderid) from orders;
+    </select>
+
+    <select id="getAllOrder" resultType="com.xmu.test.bean.Orders">
+        SELECT orderid,userid,date,SUM(unitnum*unitprice) as price
+        FROM orders GROUP BY orderid
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+
+    <select id="getOrderDetails" resultType="com.xmu.test.bean.OrderDetails">
+        SELECT menuid,unitnum,unitprice,imgurl,name as menuname from orders,menu
+        WHERE orders.menuid=menu.id AND orderid=#{id};
+    </select>
+
+    <select id="isAvailable" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM orders
+        WHERE orderid=#{id};
+    </select>
+
+    <select id="getOrderSearchNum" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT menuid) FROM orders
+        WHERE userid=#{id};
+    </select>
+
+    <select id="getSearchOrder" resultType="com.xmu.test.bean.Orders">
+        SELECT orderid,userid,date,SUM(unitnum*unitprice) as price
+        FROM orders
+        WHERE userid=#{id}
+        GROUP BY orderid
+        LIMIT #{pageStart},#{pageSize};
+    </select>
+
+    <resultMap id="orderMap" type="com.xmu.test.bean.Orders">
+        <id column="orderid" property="orderid"/>
+        <result column="date" property="date"/>
+        <result column="allprice" property="price"/>
+        <collection property="detailslist" ofType="com.xmu.test.bean.OrderDetails">
+            <result column="menuname" property="menuname"/>
+            <result column="unitnum" property="unitnum"/>
+            <result column="imgurl" property="imgurl"/>
+            <result column="unitprice" property="unitprice"/>
+        </collection>
+    </resultMap>
+
+    <select id="getUserOrder" resultMap="orderMap">
+        SELECT * FROM
+        (SELECT orderid,date,unitnum,unitprice,imgurl,name as menuname from orders,menu
+        WHERE orders.menuid=menu.id AND userid=#{id} GROUP BY orderid,menuid) aa
+        LEFT JOIN (SELECT SUM(unitnum*unitprice) as allprice,orderid FROM orders GROUP BY orderid) b
+        on aa.orderid=b.orderid;
+    </select>
+
+    <select id="getOrdersCount" resultType="java.lang.Integer">
+        SELECT MAX(orderid) FROM orders;
+    </select>
+
+    <insert id="insertOrderImmediately">
+        INSERT INTO orders VALUES(#{orderid},#{userid},#{menuid},#{date},#{unitnum},#{unitprice});
+    </insert>
+
+    <update id="changeMenuImmediately">
+        UPDATE menu
+        SET stock=stock-#{unitnum},proceeds=proceeds+#{unitnum}*#{unitprice}
+        WHERE id=#{menuid};
+    </update>
+
+    <select id="getMenuItemStock" resultType="java.lang.Integer">
+        SELECT stock FROM menu WHERE id=#{id};
+    </select>
+
+    <update id="changeStockToZero">
+        UPDATE menu
+        SET stock=0
+        WHERE id=#{id};
+    </update>
+
+</mapper>
