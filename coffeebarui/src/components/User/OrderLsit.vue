@@ -34,9 +34,9 @@
     export default {
         data() {
             return {
-                queryInfo: {
-                    currentId: window.sessionStorage.getItem("id")
-                },
+                // queryInfo: {
+                    currentId: window.sessionStorage.getItem("id"),
+                // },
                 total:"",
                 isShow:false,
                 orderList: [
@@ -92,7 +92,7 @@
         methods: {
             async getOrderList() {
                 console.log(this.queryInfo);
-                const { data: res } = await this.$http.post("userOrder", this.queryInfo);
+                const { data: res } = await this.$http.get("userOrder/"+ this.currentId);//todo
                 if (res.status == "error"){
                     this.isShow=true;
                     return this.$message("您未在本店消费，暂无订单记录！");

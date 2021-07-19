@@ -83,9 +83,9 @@
         },
         data() {
             return {
-                queryInfo: {
-                    id: window.sessionStorage.getItem("id") // session 取出
-                },
+                // queryInfo: {
+                    id: window.sessionStorage.getItem("id"), // session 取出
+                // },
                 changeRules: {
                     username: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -112,7 +112,7 @@
         methods: {
             //获取个人信息
             async getUser() {
-                const {data: res} = await this.$http.post("info", this.queryInfo);
+                const {data: res} = await this.$http.get("info/"+ this.id);//todo
                 if (res.str = "ok") {
                     this.user = res.user;
                     this.changeForm=this.user[0];
@@ -131,7 +131,7 @@
                 this.$refs.changeFormRef.validate(async valid => {
                     if (!valid) return;
                     // 调用get请求
-                    const {data: res} = await this.$http.post("change", this.changeForm);
+                    const {data: res} = await this.$http.put("change", this.changeForm);//todo
                     if (res == "ok") {
                         this.$message.success("修改成功！");
                         this.getUser();

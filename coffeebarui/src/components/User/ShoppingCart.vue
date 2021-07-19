@@ -87,12 +87,12 @@
 
         data() {
             return {
-                queryInfo: {
+                // queryInfo: {
                     currentId: window.sessionStorage.getItem('id'),
-                    currentMenuId: '',
-                    query:'',
-                    unitnum: '',
-                },
+                    // currentMenuId: '',
+                    // query:'',
+                    // unitnum: '',
+                // },
                 shoppingCartList: [],
                 totalPrice: '',
                 unitnum: 1,
@@ -101,22 +101,22 @@
         },
         methods: {
             async unitPage() {
-                const {data: res} = await this.$http.post("cartMessage", this.queryInfo);
+                const {data: res} = await this.$http.get("cartMessage/"+this.currentId);//todo
                 this.shoppingCartList = res.data;
                 this.totalPrice = res.total;
             },
             async changeNum(id, num) {
-                this.queryInfo.currentMenuId = id;
-                this.queryInfo.unitnum = num;
-                const {data: res} = await this.$http.post("AddOrSubCarts", this.queryInfo);
+                // this.queryInfo.currentMenuId = id;
+                // this.queryInfo.unitnum = num;
+                const {data: res} = await this.$http.put("AddOrSubCarts?currentmenuid="+id+"&unitnum="+num);//todo
                 if (res == "success") {
                     this.unitPage();
                 }
             },
             async handleSelectionChange(id,slctd) {
-                this.queryInfo.currentMenuId=id;
-                this.queryInfo.query=slctd;
-                const {data: res} = await this.$http.post("updateSelected" ,this.queryInfo);
+                // this.queryInfo.currentMenuId=id;
+                // this.queryInfo.query=slctd;
+                const {data: res} = await this.$http.put("updateSelected?currentmenuid="+id+"&query="+slctd);//todo
                 if(res=="success"){
                     this.unitPage();
                 }
@@ -135,8 +135,8 @@
                 if (confirmResult != "confirm") {
                     return this.$message.info("已取消删除");
                 }
-                this.queryInfo.currentMenuId=id;
-                const {data: res} = await this.$http.post("deleteCarts" ,this.queryInfo);
+                // this.queryInfo.currentMenuId=id;
+                const {data: res} = await this.$http.delete("deleteCarts/"+id);//todo
                 if (res != "success") {
                     return this.$message.error("操作失败！！！");
                 }
@@ -158,7 +158,7 @@
                 if (confirmResult != "confirm") {
                     return this.$message.info("已取消");
                 }
-                const {data: res} = await this.$http.post("submmit" ,this.queryInfo);
+                const {data: res} = await this.$http.post("submmit/"+this.currentId);//todo
                 if(res=="success"){
                     this.unitPage();
                     return this.$message.success("下单成功！！！");

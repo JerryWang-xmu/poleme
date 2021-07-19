@@ -151,7 +151,7 @@
                 this.$refs.secretFormRef.validate(async valid => {
                     if (!valid) return;
                     // 调用get请求
-                    const {data: res} = await this.$http.post("secret", this.secretForm);
+                    const {data: res} = await this.$http.put("secret", this.secretForm);//todo
                     if (res == "ok") {
                         this.$message.success("密码修改成功！您的登录状态已过期，系统将在3秒钟内自动返回登录界面，请重新登录！");
                         this.goGrdoupRecor();

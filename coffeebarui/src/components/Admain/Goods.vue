@@ -91,10 +91,17 @@
                 currentDate: new Date(),
                 activeNames: ['1'],
 
-                infoForm: {
+                // infoForm: {
                     currentMenuId: window.sessionStorage.getItem('menuId'),
                     currentId: window.sessionStorage.getItem('id'),
                     unitnum: 1,
+                // },
+
+
+                infoForm: {
+                currentMenuId: window.sessionStorage.getItem('menuId'),
+                currentId: window.sessionStorage.getItem('id'),
+                unitnum: 1,
                 },
                 detailInfo: '',
                 payForm:{
@@ -113,7 +120,7 @@
                 this.active = '';
             },
             async getInformation() {
-                const {data: res} = await this.$http.post("id2menu", this.infoForm);
+                const {data: res} = await this.$http.get("id2menu/"+this.currentMenuId+"/"+this.currentId+"/"+this.unitnum);
                 if (res.flag == "ok") {
                     this.detailInfo = res.data;
                 } else {

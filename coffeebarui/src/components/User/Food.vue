@@ -26,7 +26,7 @@
                 :with-header="false"
                 size="38%">
 
-            <el-input placeholder="请输入搜索内容" v-model="queryForm.query" style="padding: 50px" suffix-icon="el-icon-search" @input="textChanged">
+            <el-input placeholder="请输入搜索内容" v-model="query" style="padding: 50px" suffix-icon="el-icon-search" @input="textChanged">
             </el-input>
             <el-row :gutter="40">
                 <el-col :span="12" v-for="item in queryList" :key="item.id" style="margin-bottom:70px">
@@ -47,12 +47,12 @@
         data() {
             return {
                 drawer: false,
-                queryForm: {
+                // queryForm: {
                     query: '',
-                },
-                queryInfo: {
+                // },
+                // queryInfo: {
                     currentId: window.sessionStorage.getItem('activePath'),
-                },
+                // },
 
                 imgList: [],
                 queryList:[],
@@ -65,7 +65,7 @@
         methods: {
 
             async getList() {
-                const {data: res} = await this.$http.post("foodmenu", this.queryInfo);
+                const {data: res} = await this.$http.get("foodmenu/"+this.currentId);//todo
                 if (res.status == "error") return this.$message.error("操作失败！！！");
                 this.imgList = res.data;
             },
@@ -85,7 +85,7 @@
                 _el.setAttribute('style', this.active);
             },
             async textChanged() {
-                const {data: res} = await this.$http.post("selectMenu", this.queryForm);
+                const {data: res} = await this.$http.post("selectMenu?querystring="+this.query);//todo
                 if (res.flag == "ok") {
                     this.queryList = res.data;
                 }

@@ -58,9 +58,9 @@
         inject: ['reload'],
         data() {
             return {
-                queryInfo: {
+                // queryInfo: {
                     currentId: window.sessionStorage.getItem('id'),
-                },
+                // },
                 uname: window.sessionStorage.getItem('usname'),
                 //菜单列表
                 menuList: [],//动态导航
@@ -116,7 +116,7 @@
             //获取导航菜单方法
             async getMenuList() {
                 console.log(this.currentId);
-                const {data: res} = await this.$http.post("menus", this.queryInfo);
+                const {data: res} = await this.$http.get("menus/"+this.currentId);//todo
                 if (res.status != 200) return this.$message.error("操作失败！！！");
                 this.menuList = res.data;
             },
