@@ -1,0 +1,51 @@
+server:
+  port: 9099
+
+spring:
+  application:
+    name: service
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialization-mode: never
+    schema: classpath:schema.sql
+    data: classpath:testdata.sql
+    druid:
+      #初始化时建立物理连接的个数
+      initial-size: 3
+      #最小连接池数量
+      min-idle: 3
+      #最大连接池数量
+      max-active: 100
+      #获取连接时最大等待时间
+      max-wait: 600000
+      filter:
+        stat:
+          #是否开启慢sql查询监控
+          log-slow-sql: true
+          #慢SQL执行时间
+          slow-sql-millis: 100
+      validation-query: select 1
+    sql-script-encoding: UTF-8
+
+
+    url: jdbc:mysql://localhost:3306/polemeplus?serverTimezone=GMT%2B8
+    #    to fix
+    username: root
+    #    to fix
+    password: ss123456
+    #    to fix
+
+
+mybatis:
+  #po对象的包
+  type-aliases-package: xmu.edu.polemeplus.model.po
+  #mapper.xml所在的位置
+  mapper-locations: classpath*:xmu.edu.polemeplus.mapper/*.xml
+  #自动将SQL中查出来的带下划线的字段，转换为驼峰标志，再去匹配类中的属性
+  configuration:
+    #输出产生的SQL
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true

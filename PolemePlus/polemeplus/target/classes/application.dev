@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/polemeplus?serverTimezone=GMT%2B8
+    #    to fix
+    username: root
+    #    to fix
+    password: ss123456
+    #    to fix
+    druid:
+      stat-view-servlet:
+        login-username: admin
+        login-password: 123456
+        enabled: true
+        url-pattern: /druid/*
